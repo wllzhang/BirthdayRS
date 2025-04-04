@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>生日提醒</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            color: #e91e63;
+            margin-bottom: 30px;
+        }
+        .content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+        }
+        .info-box {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .festival {
+            color: #e91e63;
+            font-weight: bold;
+        }
+        .time-info {
+            color: #2196F3;
+        }
+        .zodiac-info {
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎂 生日提醒 🎂</h1>
+    </div>
+    
+    <div class="content">
+        <p>亲爱的 {{ name }}：</p>
+        
+        {% if days_until == 0 %}
+            {% if solar_match and lunar_match %}
+            <p>今天是您的阳历和农历生日，祝您生日快乐！🎉</p>
+            {% elif solar_match %}
+            <p>今天是您的阳历生日，祝您生日快乐！🎉</p>
+            {% else %}
+            <p>今天是您的农历生日，祝您生日快乐！🎉</p>
+            {% endif %}
+        {% else %}
+            {% if solar_match and lunar_match %}
+            <p>{{ days_until }}天后是您的阳历和农历生日！</p>
+            {% elif solar_match %}
+            <p>{{ days_until }}天后是您的阳历生日！</p>
+            {% else %}
+            <p>{{ days_until }}天后是您的农历生日！</p>
+            {% endif %}
+        {% endif %}
+
+        <div class="info-box">
+            <h3>📅 今日信息</h3>
+            <p class="time-info">农历：{{ lunar_month }}{{ lunar_day }}</p>
+            <p class="time-info">星期：{{ week_name }}</p>
+            {% if solar_term %}
+            <p class="time-info">节气：{{ solar_term }}</p>
+            {% endif %}
+            {% if lunar_festival %}
+            <p class="festival">农历节日：{{ lunar_festival }}</p>
+            {% endif %}
+            {% if solar_festival %}
+            <p class="festival">阳历节日：{{ solar_festival }}</p>
+            {% endif %}
+        </div>
+
+        <div class="info-box">
+            <h3>🎯 命理信息</h3>
+            <p class="zodiac-info">生肖：{{ zodiac }}</p>
+            <p class="zodiac-info">星座：{{ constellation }}</p>
+            <p class="time-info">年柱：{{ gz_year }}</p>
+            <p class="time-info">月柱：{{ gz_month }}</p>
+            <p class="time-info">日柱：{{ gz_day }}</p>
+            <p class="time-info">时柱：{{ gz_hour }}</p>
+        </div>
+        
+        <div class="info-box">
+            <h3>🎊 祝福</h3>
+            <ul>
+                <li>身体健康 🏃‍♂️</li>
+                <li>万事如意 🌟</li>
+                <li>心想事成 ✨</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>自动生日提醒系统</p>
+    </div>
+</body>
+</html> 

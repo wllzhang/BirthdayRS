@@ -1,0 +1,20 @@
+smtp:
+  host: smtp.example.com
+  port: 587
+  username: your_email@example.com
+  password: your_password
+  use_tls: true
+
+recipients:
+  - name: 张三
+    email: zhangsan@example.com
+    solar_birthday: 1990-01-01  # 阳历生日
+    lunar_birthday: 1989-12-05  # 对应的阳历日期
+    reminder_days: 3  # 提前3天提醒
+    template_file: birthday.html
+  
+  - name: 李四
+    email: lisi@example.com
+    lunar_birthday: 1991-02-15  # 只设置农历生日
+    reminder_days: 7  # 提前7天提醒
+    template_file: custom_birthday.html  # 使用自定义模板 
