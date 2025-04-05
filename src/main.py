@@ -1,9 +1,15 @@
+"""
+主程序入口
+"""
 import asyncio
 import logging
 import os
 import sys
+import webbrowser
 from pathlib import Path
 from typing import List, Tuple, Dict
+import click
+from datetime import datetime
 
 from src.core.config import Config
 from src.core.checker import BirthdayChecker, Recipient
@@ -86,15 +92,117 @@ class BirthdayReminder:
             logger.error(f"Error during birthday check: {e}")
             raise
 
+    async def preview_email(self, recipient_name: str = None, date_str: str = None) -> None:
+        """预览邮件内容"""
+        # 模拟收件人信息
+        recipient = Recipient(
+            name=recipient_name or "测试用户",
+            email="test@example.com",
+            solar_birthday="1990-01-01",
+            lunar_birthday="1990-02-15",
+            reminder_days=3,
+            template_file="birthday.html"
+        )
 
-async def main():
-    """主入口函数"""
-    try:
-        reminder = BirthdayReminder()
-        await reminder.run()
-    except Exception as e:
-        logger.error(f"Application error: {e}")
-        sys.exit(1)
+        # 使用指定日期或当前日期
+        if date_str:
+            check_date = datetime.strptime(date_str, "%Y-%m-%d")
+        else:
+            check_date = datetime.now()
+
+        # 模拟额外信息
+        extra_info = {
+            'solar_match': True,
+            'lunar_match': False,
+            'days_until': 0,
+            'zodiac': '马',
+            'gz_year': '庚午',
+            'gz_month': '戊寅',
+            'gz_day': '甲子',
+            'gz_hour': '甲子',
+            'lunar_month': '正月',
+            'lunar_day': '十五',
+            'lunar_festival': '元宵节',
+            'solar_festival': '元旦',
+            'solar_term': '立春',
+            'week_name': '星期一',
+            'constellation': '摩羯座'
+        }
+
+        # 渲染模板
+        content = self.notification_sender.render_birthday_email(
+            name=recipient.name,
+            template_file=recipient.template_file,
+            extra_info=extra_info
+        )
+
+        # 创建预览文件
+        preview_dir = self.root_dir / "previews"
+        preview_dir.mkdir(exist_ok=True)
+        preview_file = preview_dir / \
+            f"preview_{recipient.name}_{check_date.strftime('%Y%m%d')}.html"
+
+        # 添加完整的HTML结构
+        full_html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>生日提醒预览 - {recipient.name}</title>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    max-width: 800px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }}
+                .preview-info {{
+                    background-color: #f5f5f5;
+                    padding: 10px;
+                    margin-bottom: 20px;
+                    border-radius: 5px;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="preview-info">
+                <h2>邮件预览信息</h2>
+                <p><strong>收件人:</strong> {recipient.name} &lt;{recipient.email}&gt;</p>
+                <p><strong>日期:</strong> {check_date.strftime('%Y-%m-%d')}</p>
+                <p><strong>提前天数:</strong> {extra_info['days_until']}</p>
+            </div>
+            {content}
+        </body>
+        </html>
+        """
+
+        with open(preview_file, "w", encoding="utf-8") as f:
+            f.write(full_html)
+
+        # 用浏览器打开预览文件
+        webbrowser.open(f"file://{preview_file.absolute()}")
+        print(f"预览文件已保存到: {preview_file}")
+
+
+@click.group()
+def cli():
+    """生日提醒系统"""
+    pass
+
+
+@cli.command()
+@click.option('--recipient', '-r', help='要预览的收件人姓名')
+@click.option('--date', '-d', help='预览日期 (格式: YYYY-MM-DD)')
+def preview(recipient, date):
+    """预览邮件内容"""
+    asyncio.run(BirthdayReminder().preview_email(recipient, date))
+
+
+@cli.command()
+def run():
+    """运行生日提醒主流程"""
+    asyncio.run(BirthdayReminder().run())
+
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    cli()

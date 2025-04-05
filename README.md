@@ -23,8 +23,9 @@
   - [x] 可自定义提前提醒天数
   - [x] 支持多人生日提醒
   - [x] 支持邮件通知
+  - [x] 支持邮件预览功能
   - [ ] 支持多通知源
-  - [ ] 预览邮件
+  - [X] 预览邮件
   - [ ] github action支持
 ## 安装说明
 
@@ -64,15 +65,33 @@ recipients:
 
 ## 使用方法
 
-1. 直接运行主程序：
+1. 运行生日提醒：
 ```bash
-python src/main.py
+python src/main.py run
 ```
 
-2. 使用定时任务（推荐）：
+2. 预览邮件内容：
+```bash
+# 预览默认测试用户的邮件
+python src/main.py preview
+
+# 预览指定收件人的邮件
+python src/main.py preview --recipient "张三"
+
+# 预览指定日期的邮件
+python src/main.py preview --recipient "张三" --date "2024-01-01"
+```
+
+3. 查看帮助信息：
+```bash
+python src/main.py --help
+python src/main.py preview --help
+```
+
+4. 使用定时任务（推荐）：
 ```bash
 # Linux/Mac (crontab -e)
-0 9 * * * cd /path/to/python_birthday_reminder && python src/main.py
+0 9 * * * cd /path/to/python_birthday_reminder && python src/main.py run
 
 # Windows (任务计划程序)
 # 创建每天早上9点运行的计划任务
@@ -108,6 +127,7 @@ pytest --cov=src tests/
 - aiosmtplib >= 2.0.0
 - pyyaml >= 6.0.0
 - jinja2 >= 3.0.0
+- click >= 8.0.0
 - pytest >= 7.0.0
 - pytest-asyncio >= 0.18.0
 - pytest-cov >= 3.0.0
