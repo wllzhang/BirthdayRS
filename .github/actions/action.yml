@@ -25,7 +25,7 @@ runs:
       run: |
         if [[ ! -f "${{ inputs.config_filename }}" ]]; then
           echo "📥 文件不存在，正在写入配置..."
-          echo "${{ vars.BIRTHDAY_YAML }}" > "${{ inputs.config_filename}}"
+          echo "${{ BIRTHDAY_YAML }}" > "${{ inputs.config_filename}}"
           # 获取当前日期
           current_date=$(date '+%Y-%m-%d')
 
@@ -38,7 +38,7 @@ recipients:
 EOF
             )
             # 将生成的 YAML 内容写入配置文件
-            echo "$APPEND_YAML" > "${{ inputs.config_filename }}"
+            echo "$APPEND_YAML" >> "${{ inputs.config_filename }}"
           fi
          
           echo "✅ 配置文件已创建并更新。"
