@@ -25,7 +25,7 @@ runs:
       run: |
         if [[ ! -f "${{ inputs.config_filename }}" ]]; then
           echo "📥 文件不存在，正在写入配置..."
-          echo "${{ BIRTHDAY_YAML }}" > "${{ inputs.config_filename}}"
+          echo "${BIRTHDAY_YAML}" > "${{ inputs.config_filename}}"
           # 获取当前日期
           current_date=$(date '+%Y-%m-%d')
 
