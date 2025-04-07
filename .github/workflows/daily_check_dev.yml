@@ -1,4 +1,4 @@
-name: Daily Birthday Check
+name: Daily Birthday Check Dev
 
 on:
   schedule:
