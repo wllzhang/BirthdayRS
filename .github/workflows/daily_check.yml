@@ -1,30 +1,48 @@
 name: Daily Birthday Check
 
+# 🌟 触发器：每天运行一次 + 允许手动触发
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天 UTC 00:00 运行
-  workflow_dispatch:  # 允许手动触发
-
+    - cron: '0 0 * * *'  # 每天 UTC 00:00 运行（北京时间早上8点）
+  workflow_dispatch:  # 手动触发入口（在GitHub UI中点按钮）
 jobs:
   check-birthdays:
+    name: 检查今日生日并发送提醒
+    environment: Test
     runs-on: ubuntu-latest
-    
+    # 📦 环境变量（全局）
+    env:
+      TZ: Asia/Shanghai  # 设置为北京时间（避免时间偏差）
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up Python
+    # 1️⃣ 拉取仓库代码
+    - name: 🛎️ Checkout code
+      uses: actions/checkout@v3
+
+    # 2️⃣ 设置 Python 运行环境
+    - name: 🐍 Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-    
-    - name: Install dependencies
+
+    # 3️⃣ 安装依赖包
+    - name: 📦 Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    
-    - name: Create config file
+
+    # 4️⃣ 创建配置文件（通过 GitHub Secret 注入 YAML 内容）
+    - name: 🛠️ Create config file from secret
       run: |
-        echo "${{ secrets.CONFIG_YAML }}" > config.yml
-    
-    - name: Run birthday check
-      run: python -m src.main 
+        echo "${{ vars.BIRTHDAY_YAML }}" > config.yml
+
+    # 5️⃣ 记录当前运行时间（用于调试）
+    - name: 🕓 Show current time
+      run: date
+
+    # 6️⃣ 执行生日检查逻辑，输出是否有生日
+    - name: 🎉 Run birthday check
+      id: check
+      run: |
+        echo "📢 Running birthday check..."
+        python -m src.main run 
+ 
