@@ -9,9 +9,9 @@ env:
   TZ: Asia/Shanghai  # 设置为北京时间
 
 jobs:
-  check-birthdays-pro:
-    name: 🔍 Pro环境 - 检查生日
-    environment: Pro
+  check-birthdays:
+    name: 🔍 Dev环境 - 检查生日
+    environment: Dev
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +22,6 @@ jobs:
       - uses: ./.github/actions
         with:
           config_filename: config.yml
-          debug: false
+          debug: true
         env:
           BIRTHDAY_YAML: ${{ vars.BIRTHDAY_YAML }}

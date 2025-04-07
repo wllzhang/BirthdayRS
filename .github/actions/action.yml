@@ -1,0 +1,61 @@
+name: Birthday Check Action
+description: 安装依赖、写配置、运行生日检查逻辑
+
+inputs:
+  config_filename:
+    description: 要生成的配置文件名
+    required: false
+    default: config.yml
+
+  debug:
+    description: 是否开启调试模式，显示完整配置内容
+    required: false
+    default: "false"
+
+runs:
+  using: "composite"
+  steps:
+    - name: 📦 安装依赖
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+      shell: bash
+
+    - name: 🛠️ 如果配置文件不存在，则创建
+      run: |
+        if [[ ! -f "${{ inputs.config_filename }}" ]]; then
+          echo "📥 文件不存在，正在写入配置..."
+          current_date=$(date '+%Y-%m-%d')
+          echo "${BIRTHDAY_YAML}" > "${{ inputs.config_filename }}"
+          BIRTHDAY_YAML=$(cat <<EOF
+recipients:
+  - name: "测试用户"
+    solar_birthday: "$current_date"  # 使用当前日期
+EOF
+)
+
+      echo "$BIRTHDAY_YAML" > "${{ inputs.config_filename }}"
+        else
+          echo "✅ 配置文件已存在，跳过写入。"
+        fi
+      shell: bash
+
+    - name: 🕓 显示当前时间
+      run: date
+      shell: bash
+
+    - name: 📄 显示配置内容
+      run: |
+        echo "🎯 配置文件：${{ inputs.config_filename }}"
+        if [[ "${{ inputs.debug }}" == "true" ]]; then
+          echo "📜 全部内容："
+          cat "${{ inputs.config_filename }}"
+        else
+          echo "📜 前 10 行："
+          head -n 10 "${{ inputs.config_filename }}"
+        fi
+      shell: bash
+
+    - name: 🎉 执行生日检查
+      run: python -m src.main run
+      shell: bash
