@@ -25,7 +25,7 @@ runs:
       run: |
         if [[ ! -f "${{ inputs.config_filename }}" ]]; then
           echo "📥 文件不存在，正在写入配置..."
-          echo "${{ vars.BIRTHDAY_YAML }}" > config.yml
+          echo "${{ vars.BIRTHDAY_YAML }}" > "${{ inputs.config_filename}}"
           # 获取当前日期
           current_date=$(date '+%Y-%m-%d')
 
@@ -37,8 +37,8 @@ recipients:
     solar_birthday: "$current_date"  # 使用当前日期
 EOF
             )
-          # 将生成的 YAML 内容写入配置文件
-          echo "$APPEND_YAML" > "${{ inputs.config_filename }}"
+            # 将生成的 YAML 内容写入配置文件
+            echo "$APPEND_YAML" > "${{ inputs.config_filename }}"
           fi
          
           echo "✅ 配置文件已创建并更新。"
@@ -52,15 +52,7 @@ EOF
       shell: bash
 
     - name: 📄 显示配置内容
-      run: |
-        echo "🎯 配置文件：${{ inputs.config_filename }}"
-        if [[ "${{ inputs.debug }}" == "true" ]]; then
-          echo "📜 全部内容："
-          cat "${{ inputs.config_filename }}"
-        else
-          echo "📜 前 10 行："
-          head -n 10 "${{ inputs.config_filename }}"
-        fi
+      run: cat "${{ inputs.config_filename }}"
       shell: bash
 
     - name: 🎉 执行生日检查
