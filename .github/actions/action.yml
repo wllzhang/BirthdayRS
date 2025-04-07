@@ -20,8 +20,9 @@ runs:
       run: |
         if [[ ! -f "${{ inputs.config_filename }}" ]]; then
           echo "📥 文件不存在，正在写入配置..."
-          echo "${BIRTHDAY_YAML}" > "${{ inputs.config_filename}}"
+          echo "${BIRTHDAY_YAML}" > "${{ inputs.config_filename }}"
           echo "${TEST_YAML}"
+          echo "Hello, World!" >> "${{ inputs.config_filename }}"
           echo "${TEST_YAML}" >> "${{ inputs.config_filename }}"
           echo "✅ 配置文件已创建并更新。"
         else
