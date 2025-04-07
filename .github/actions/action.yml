@@ -7,11 +7,6 @@ inputs:
     required: false
     default: config.yml
 
-  debug:
-    description: 是否开启调试模式，显示完整配置内容
-    required: false
-    default: "false"
-
 runs:
   using: "composite"
   steps:
@@ -26,21 +21,7 @@ runs:
         if [[ ! -f "${{ inputs.config_filename }}" ]]; then
           echo "📥 文件不存在，正在写入配置..."
           echo "${BIRTHDAY_YAML}" > "${{ inputs.config_filename}}"
-          # 获取当前日期
-          current_date=$(date '+%Y-%m-%d')
-
-          # 如果是调试模式，写入测试用户的内容
-          if [[ "${{ inputs.debug }}" == "true" ]]; then
-            APPEND_YAML=$(cat <<EOF
-recipients:
-  - name: "测试用户"
-    solar_birthday: "$current_date"  # 使用当前日期
-EOF
-            )
-            # 将生成的 YAML 内容写入配置文件
-            echo "$APPEND_YAML" >> "${{ inputs.config_filename }}"
-          fi
-         
+          echo "${TEST_YAML}" >> "${{ inputs.config_filename }}"
           echo "✅ 配置文件已创建并更新。"
         else
           echo "✅ 配置文件已存在，跳过写入。"

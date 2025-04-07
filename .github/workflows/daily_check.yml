@@ -22,6 +22,5 @@ jobs:
       - uses: ./.github/actions
         with:
           config_filename: config.yml
-          debug: false
         env:
           BIRTHDAY_YAML: ${{ vars.BIRTHDAY_YAML }}

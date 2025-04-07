@@ -19,9 +19,12 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+      - name: Set dynamic environment variables
+        run: |
+          echo "TEST_YAML=solar_birthday: $(date '+%Y-%m-%d')" >> $GITHUB_ENV
       - uses: ./.github/actions
         with:
           config_filename: config.yml
-          debug: true
         env:
           BIRTHDAY_YAML: ${{ vars.BIRTHDAY_YAML }}
+          TEST_YAML: ${{ env.TEST_YAML }}
