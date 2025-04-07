@@ -3,7 +3,6 @@
 """
 import asyncio
 import logging
-import os
 import sys
 import webbrowser
 from pathlib import Path
@@ -30,8 +29,7 @@ logger = logging.getLogger(__name__)
 class BirthdayReminder:
     def __init__(self, config_path: str = None):
         self.root_dir = Path(__file__).parent.parent
-        self.config_path = config_path or str(
-            self.root_dir / "config.yml")
+        self.config_path = config_path or str(self.root_dir / "config.yml")
         self.config = self._load_config()
         self.notification_sender = NotificationSender(
             self.config.smtp,
@@ -57,10 +55,10 @@ class BirthdayReminder:
             )
 
             await self.notification_sender.send_birthday_reminder(
-                recipient_name=recipient.name,
-                recipient_email=recipient.email,
+                recipient=recipient,
                 content=content,
-                days_until=extra_info['days_until']
+                days_until=extra_info['days_until'],
+                age=extra_info['age']
             )
             logger.info(
                 f"Successfully sent birthday reminder to {recipient.name}")
@@ -94,7 +92,6 @@ class BirthdayReminder:
 
     async def preview_email(self, recipient_name: str = None, date_str: str = None) -> None:
         """预览邮件内容"""
-        # 模拟收件人信息
         recipient = Recipient(
             name=recipient_name or "测试用户",
             email="test@example.com",
@@ -104,17 +101,14 @@ class BirthdayReminder:
             template_file="birthday.html"
         )
 
-        # 使用指定日期或当前日期
-        if date_str:
-            check_date = datetime.strptime(date_str, "%Y-%m-%d")
-        else:
-            check_date = datetime.now()
+        check_date = datetime.strptime(
+            date_str, "%Y-%m-%d") if date_str else datetime.now()
 
-        # 模拟额外信息
         extra_info = {
             'solar_match': True,
             'lunar_match': False,
             'days_until': 0,
+            'age': 34,
             'zodiac': '马',
             'gz_year': '庚午',
             'gz_month': '戊寅',
@@ -129,20 +123,17 @@ class BirthdayReminder:
             'constellation': '摩羯座'
         }
 
-        # 渲染模板
         content = self.notification_sender.render_birthday_email(
             name=recipient.name,
             template_file=recipient.template_file,
             extra_info=extra_info
         )
 
-        # 创建预览文件
         preview_dir = self.root_dir / "previews"
         preview_dir.mkdir(exist_ok=True)
         preview_file = preview_dir / \
             f"preview_{recipient.name}_{check_date.strftime('%Y%m%d')}.html"
 
-        # 添加完整的HTML结构
         full_html = f"""
         <!DOCTYPE html>
         <html>
@@ -179,7 +170,6 @@ class BirthdayReminder:
         with open(preview_file, "w", encoding="utf-8") as f:
             f.write(full_html)
 
-        # 用浏览器打开预览文件
         webbrowser.open(f"file://{preview_file.absolute()}")
         print(f"预览文件已保存到: {preview_file}")
 

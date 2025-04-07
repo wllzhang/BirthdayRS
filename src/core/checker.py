@@ -39,6 +39,8 @@ class BirthdayChecker:
             raise ValueError(f"Unsupported date type: {type(date_obj)}")
         return dt.year, dt.month, dt.day
 
+
+
     def _check_birthday(self, recipient: Recipient, today: datetime) -> Tuple[bool, Dict]:
         """
         检查是否是生日（包括提前提醒）
@@ -69,7 +71,7 @@ class BirthdayChecker:
             'lunar_festival': '',   # 农历节日
             'solar_festival': '',   # 阳历节日
             'solar_term': '',       # 节气
-
+            'age': '',
             'week_name': '',        # 星期
             'constellation': ''     # 星座
         }
@@ -112,9 +114,11 @@ class BirthdayChecker:
             for i, check_date in enumerate(check_dates):
 
                 year, month, day = self._convert_to_date_parts(check_date)
+
                 if month == birth_month and day == birth_day:
                     extra_info['solar_match'] = True
                     extra_info['days_until'] = i
+                    extra_info['age'] = year - birth_year
                     break
 
         # 检查农历生日
@@ -129,6 +133,7 @@ class BirthdayChecker:
                         check_lunar.getDay() == birth_day):
                     extra_info['lunar_match'] = True
                     extra_info['days_until'] = i
+                    extra_info['age'] = year - birth_year
                     break
 
         # 如果是生日，添加生肖和其他信息

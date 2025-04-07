@@ -11,28 +11,30 @@ from src.notification.sender import NotificationSender
 
 @pytest.fixture
 def mock_extra_info():
-    """模拟的额外信息"""
+    """模拟的额外信息，使用checker.py中的默认值"""
     return {
-        'solar_match': True,
+        'solar_match': False,
         'lunar_match': False,
         'days_until': 0,
-        'zodiac': '龙',
-        'gz_year': '壬辰',
-        'gz_month': '丙寅',
-        'gz_day': '甲子',
-        'gz_hour': '丙子',
-        'lunar_month': '三月',
-        'lunar_day': '初一',
-        'lunar_festival': '寒食节',
+        'age': 34,
+        'zodiac': '',
+        'gz_year': '',
+        'gz_month': '',
+        'gz_day': '',
+        'gz_hour': '',
+        'lunar_month': '',
+        'lunar_day': '',
+        'lunar_festival': '',
         'solar_festival': '',
-        'solar_term': '清明',
-        'week_name': '星期一',
-        'constellation': '白羊座'
+        'solar_term': '',
+        'week_name': '',
+        'constellation': ''
     }
 
 
 @pytest.fixture
 def mock_components():
+    """模拟组件"""
     return {
         'notification_sender': Mock(spec=NotificationSender),
         'birthday_checker': Mock(spec=BirthdayChecker)
@@ -41,6 +43,7 @@ def mock_components():
 
 @pytest.fixture
 def reminder(test_config, mock_components):
+    """创建测试用的BirthdayReminder实例"""
     with patch('src.main.Config.from_yaml', return_value=test_config), \
             patch('src.main.NotificationSender', return_value=mock_components['notification_sender']), \
             patch('src.main.BirthdayChecker', return_value=mock_components['birthday_checker']):
@@ -63,11 +66,8 @@ async def test_check_birthdays_no_birthdays(reminder, mock_components, test_reci
 
     await reminder.run()
 
-    # 验证检查被调用
     mock_components['birthday_checker'].check_birthdays.assert_called_once()
-    # 验证没有发送邮件
     mock_components['notification_sender'].send_birthday_reminder.assert_not_called()
-    # 验证没有渲染模板
     mock_components['notification_sender'].render_birthday_email.assert_not_called()
 
 
@@ -84,20 +84,17 @@ async def test_check_birthdays_with_birthday(reminder, mock_components, test_rec
 
     await reminder.run()
 
-    # 验证检查被调用
     mock_components['birthday_checker'].check_birthdays.assert_called_once()
-    # 验证模板渲染被调用一次
     mock_components['notification_sender'].render_birthday_email.assert_called_once_with(
         name=test_recipients[0].name,
         template_file=test_recipients[0].template_file,
         extra_info=mock_extra_info
     )
-    # 验证邮件发送被调用一次
     mock_components['notification_sender'].send_birthday_reminder.assert_called_once_with(
-        recipient_name=test_recipients[0].name,
-        recipient_email=test_recipients[0].email,
+        recipient=test_recipients[0],
         content="Test content",
-        days_until=mock_extra_info['days_until']
+        days_until=mock_extra_info['days_until'],
+        age=mock_extra_info['age']
     )
 
 
@@ -114,7 +111,6 @@ async def test_error_handling_birthday_check(reminder, mock_components):
     """测试生日检查错误处理"""
     mock_components['birthday_checker'].check_birthdays.side_effect = Exception(
         "Check error")
-
     with pytest.raises(Exception):
         await reminder.run()
 

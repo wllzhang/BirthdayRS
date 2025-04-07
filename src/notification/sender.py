@@ -10,6 +10,7 @@ from jinja2 import Environment, FileSystemLoader
 from typing import Dict, Optional
 
 from src.core.config import SMTPConfig
+from src.core.checker import Recipient
 
 
 class NotificationSender:
@@ -41,19 +42,15 @@ class NotificationSender:
             template_file: 模板文件名
             extra_info: 额外信息，包含生肖和节气等
         """
-        return self._render_template(
-            template_file,
-            name=name,
-            **extra_info
-        )
+        template = self.env.get_template(template_file)
+        return template.render(name=name, **extra_info)
 
-    async def send_email(self, to_name: str, to_email: str, subject: str, content: str):
+    async def send_email(self, to_email: str, subject: str, content: str):
         """发送邮件"""
         message = MIMEMultipart()
         message["From"] = self.smtp_config.username
         message["To"] = to_email
         message["Subject"] = subject
-
         message.attach(MIMEText(content, "html"))
 
         async with aiosmtplib.SMTP(
@@ -61,22 +58,10 @@ class NotificationSender:
             port=self.smtp_config.port,
             use_tls=self.smtp_config.use_tls
         ) as smtp:
-            await smtp.login(
-                self.smtp_config.username,
-                self.smtp_config.password
-            )
+            await smtp.login(self.smtp_config.username, self.smtp_config.password)
             await smtp.send_message(message)
 
-    async def send_birthday_reminder(self, recipient_name: str, recipient_email: str,
-                                     content: str, days_until: int = 0):
+    async def send_birthday_reminder(self, recipient: Recipient, content: str, days_until: int, age: int):
         """发送生日提醒邮件"""
-        subject = f"生日提醒 - {recipient_name}"
-        if days_until > 0:
-            subject += f" ({days_until}天后)"
-
-        await self.send_email(
-            to_name=recipient_name,
-            to_email=recipient_email,
-            subject=subject,
-            content=content
-        )
+        subject = f"生日提醒- {recipient.name} - {age}岁 - {days_until}天后"
+        await self.send_email(recipient.email, subject, content)
