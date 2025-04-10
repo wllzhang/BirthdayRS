@@ -13,9 +13,34 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  update-readme:
+    name: Update README
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && contains(github.event.head_commit.modified, 'README.md')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update README
+        run: |
+          sed -i "s|ghcr.io/.*/birthdayrs|ghcr.io/${{ github.repository_owner }}/birthdayrs|g" README.md
+          sed -i "s|git clone .*|git clone https://github.com/${{ github.repository }}.git|g" README.md
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "Update README with action" || exit 0
+          git push
+
   lint:
     name: Lint Python Code
     runs-on: ubuntu-latest
+    needs: update-readme
+    if: always()
 
     steps:
       - uses: actions/checkout@v4
@@ -38,6 +63,7 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
     needs: lint
+    if: always()
 
     steps:
       - uses: actions/checkout@v4
