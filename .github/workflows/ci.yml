@@ -38,7 +38,7 @@ jobs:
       - name: Update README
         if: steps.check_readme.outputs.readme_changed == 'true'
         run: |
-          sed -i "s|ghcr.io/.*/birthdayrs|ghcr.io/${{ github.repository_owner }}/birthdayrs|g" README.md
+          sed -i "s|ghcr.io/.*/birthdayrs:latest|ghcr.io/${{ github.repository_owner }}/birthdayrs:latest|g" README.md
           sed -i "s|git clone .*|git clone https://github.com/${{ github.repository }}.git|g" README.md
 
       - name: Commit changes
