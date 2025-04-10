@@ -5,7 +5,6 @@
 ## CI/CD 状态
 
 [![CI](https://github.com/wllzhang/BirthdayRS/actions/workflows/ci.yml/badge.svg)](https://github.com/wllzhang/BirthdayRS/actions/workflows/ci.yml)
-[![Docker](https://github.com/wllzhang/BirthdayRS/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/wllzhang/BirthdayRS/actions/workflows/docker-publish.yml)
 [![Daily Check](https://github.com/wllzhang/BirthdayRS/actions/workflows/daily_check.yml/badge.svg)](https://github.com/wllzhang/BirthdayRS/actions/workflows/daily_check.yml)
 
 ## 功能特点
