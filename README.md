@@ -98,11 +98,11 @@ recipients:
 3. Docker
 ```bash
 # 运行生日提醒
-docker run -v ${PWD}/config.yml:/app/config.yml ghcr.io/REPOSITORY_OWNER/birthdayrs run
+docker run -v ${PWD}/config.yml:/app/config.yml ghcr.io/wllzhang/birthdayrs run
 # 预览邮件
 docker run -v ${PWD}/config.yml:/app/config.yml `
            -v ${PWD}/previews:/app/previews `
-           ghcr.io/REPOSITORY_OWNER/birthdayrs  preview -r "测试用户" -d "2024-01-01"
+           ghcr.io/wllzhang/birthdayrs  preview -r "测试用户" -d "2024-01-01"
 ```
 
 
