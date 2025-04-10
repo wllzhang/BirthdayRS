@@ -98,9 +98,11 @@ recipients:
 3. Docker
 ```bash
 # 运行生日提醒
-docker run -d -v $(pwd)/config.yml:/app/config.yml birthday-reminder run
+docker run -v ${PWD}/config.yml:/app/config.yml dockerforzwl/birthdayrs run
 # 预览邮件
-docker run -d -v $(pwd)/config.yml:/app/config.yml birthday-reminder preview -r "测试用户" -d "2024-01-01"
+docker run -v ${PWD}/config.yml:/app/config.yml `
+           -v ${PWD}/previews:/app/previews `
+           dockerforzwl/birthdayrs preview -r "测试用户" -d "2024-01-01"
 ```
 
 
