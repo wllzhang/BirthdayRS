@@ -18,17 +18,31 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: github.event_name == 'push' &&  contains(github.event.head_commit.modified, 'README.md')
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for README changes
+        id: check_readme
+        run: |
+          git fetch origin main
+          if git diff --name-only origin/main HEAD | grep -q 'README.md'; then
+            echo "readme_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "readme_changed=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Update README
+        if: steps.check_readme.outputs.readme_changed == 'true'
         run: |
           sed -i "s|ghcr.io/.*/birthdayrs|ghcr.io/${{ github.repository_owner }}/birthdayrs|g" README.md
           sed -i "s|git clone .*|git clone https://github.com/${{ github.repository }}.git|g" README.md
 
       - name: Commit changes
+        if: steps.check_readme.outputs.readme_changed == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
