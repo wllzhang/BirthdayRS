@@ -27,9 +27,9 @@
   - [x] 预览邮件
   - [x] 添加default 
   - [x] github action支持
+  - [X] Docker部署
 - **TODO**
   - [ ] 支持多通知源
-  - [ ] Docker部署
 ## 安装说明
 
 1. 克隆项目到本地：
