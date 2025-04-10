@@ -20,11 +20,12 @@ jobs:
       - name: Update README
         run: |
           sed -i "s|ghcr.io/.*/birthdayrs|ghcr.io/${{ github.repository_owner }}/birthdayrs|g" README.md
+          sed -i "s|git clone .*|git clone https://github.com/${{ github.repository }}.git|g" README.md
 
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add README.md
-          git commit -m "Update README with repository owner" || exit 0
+          git commit -m "Update README with action" || exit 0
           git push 

@@ -34,7 +34,7 @@
 
 1. 克隆项目到本地：
 ```bash
-git clone [项目地址]
+git clone [地址]
 cd python_birthday_reminder
 ```
 
