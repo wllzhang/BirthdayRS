@@ -29,7 +29,7 @@ jobs:
         id: check_readme
         run: |
           git fetch origin main
-          if git diff --name-only origin/main HEAD | grep -q 'README.md'; then
+          if git diff --name-only origin/main HEAD~1 | grep -q 'README.md'; then
             echo "readme_changed=true" >> $GITHUB_OUTPUT
           else
             echo "readme_changed=false" >> $GITHUB_OUTPUT

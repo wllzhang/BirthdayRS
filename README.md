@@ -10,12 +10,6 @@
 
 一个功能强大的生日提醒系统，支持农历和阳历生日提醒，并提供丰富的中国传统文化信息。
 
- 
-
-
-
- 
-
 <!-- ![GitHub stars](https://img.shields.io/github/stars/wllzhang/BirthdayRS?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/wllzhang/BirthdayRS?style=social)
 ![GitHub issues](https://img.shields.io/github/issues/wllzhang/BirthdayRS) -->
