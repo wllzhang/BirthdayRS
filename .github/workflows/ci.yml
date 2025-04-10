@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && contains(github.event.head_commit.modified, 'README.md')
+    if: github.event_name == 'push' &&  contains(github.event.head_commit.modified, 'README.md')
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
