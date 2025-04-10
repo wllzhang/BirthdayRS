@@ -1,13 +1,11 @@
 """
 通知发送模块，包含邮件模板渲染和发送功能
 """
-import os
-from pathlib import Path
 import aiosmtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from jinja2 import Environment, FileSystemLoader
-from typing import Dict, Optional
+from typing import Dict
 
 from src.core.config import SMTPConfig
 from src.core.checker import Recipient

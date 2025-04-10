@@ -2,7 +2,7 @@
 配置管理模块
 """
 from dataclasses import dataclass
-from typing import List, Optional, Dict
+from typing import List, Optional
 import yaml
 
 

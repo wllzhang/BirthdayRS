@@ -3,7 +3,7 @@
 """
 from datetime import datetime, timedelta, date
 from typing import List, Tuple, Dict, Union
-from lunar_python import Lunar, Solar
+from lunar_python import Solar
 from src.core.config import Recipient
 
 
@@ -28,7 +28,15 @@ class BirthdayChecker:
         return results
 
     def _convert_to_date_parts(self, date_obj: Union[str, datetime, date]) -> Tuple[int, int, int]:
-        """转换日期为年月日元组"""
+        """
+        转换日期为年月日元组
+
+        Args:
+            date_obj: 日期对象，可以是字符串、datetime或date类型
+
+        Returns:
+            Tuple[int, int, int]: 年月日的元组
+        """
         if isinstance(date_obj, str):
             dt = datetime.strptime(date_obj, "%Y-%m-%d")
         elif isinstance(date_obj, datetime):
@@ -38,8 +46,6 @@ class BirthdayChecker:
         else:
             raise ValueError(f"Unsupported date type: {type(date_obj)}")
         return dt.year, dt.month, dt.day
-
-
 
     def _check_birthday(self, recipient: Recipient, today: datetime) -> Tuple[bool, Dict]:
         """
@@ -129,8 +135,8 @@ class BirthdayChecker:
                 year, month, day = self._convert_to_date_parts(check_date)
                 check_solar = Solar.fromYmd(year, month, day)
                 check_lunar = check_solar.getLunar()
-                if (check_lunar.getMonth() == birth_month and
-                        check_lunar.getDay() == birth_day):
+                if (check_lunar.getMonth() == birth_month
+                        and check_lunar.getDay() == birth_day):
                     extra_info['lunar_match'] = True
                     extra_info['days_until'] = i
                     extra_info['age'] = year - birth_year
