@@ -1,5 +1,5 @@
 # 生日提醒系统 (Birthday Reminder System)
-[![Docker Image](https://img.shields.io/badge/docker%20image-ghcr.io/wllzhang/birthdayrs-blue)](https://github.com/wllzhang/BirthdayRS/pkgs/container/birthdayrs)
+[![Docker Image](https://img.shields.io/badge/docker%20image-ghcr.io/wllzhang/birthdayrs)
 [![Python Version](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
 [![Code Style](https://img.shields.io/badge/code%20style-flake8-black.svg)](https://flake8.pycqa.org/)
 
