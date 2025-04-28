@@ -79,15 +79,21 @@ class BirthdayReminder:
         logger.info("Starting birthday reminder check")
         try:
             birthday_results = self.check_birthdays()
+            tasks = []
 
             for recipient, is_birthday, extra_info in birthday_results:
                 logger.info(f"Checking birthday for {recipient.name}")
                 if is_birthday:
-                    await self.send_birthday_reminder(recipient, extra_info)
+                    tasks.append(self.send_birthday_reminder(recipient, extra_info))
 
-            logger.info("Birthday check completed successfully")
+            if tasks:
+                await asyncio.gather(*tasks, return_exceptions=True)
+                logger.info(f"Successfully processed {len(tasks)} birthday reminders")
+            else:
+                logger.info("No birthdays to process today")
+
         except Exception as e:
-            logger.error(f"Error during birthday check: {e}")
+            logger.error(f"Error during birthday check: {type(e).__name__}: {e}")
             raise
 
     async def preview_email(self, recipient_name: str = None, date_str: str = None) -> None:

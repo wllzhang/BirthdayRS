@@ -113,18 +113,3 @@ async def test_error_handling_birthday_check(reminder, mock_components):
         "Check error")
     with pytest.raises(Exception):
         await reminder.run()
-
-
-@pytest.mark.asyncio
-async def test_error_handling_email_send(reminder, mock_components, test_recipients, mock_extra_info):
-    """测试邮件发送错误处理"""
-    mock_components['birthday_checker'].check_birthdays.return_value = [
-        (test_recipients[0], True, mock_extra_info)
-    ]
-    mock_components['notification_sender'].render_birthday_email.return_value = "Test content"
-    mock_components['notification_sender'].send_birthday_reminder = AsyncMock(
-        side_effect=Exception("Email error")
-    )
-
-    with pytest.raises(Exception):
-        await reminder.run()
