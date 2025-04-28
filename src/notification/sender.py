@@ -34,6 +34,7 @@ def retry_on_failure(max_retries=3, delay=1):
         return wrapper
     return decorator
 
+
 class NotificationSender:
     def __init__(self, smtp_config: SMTPConfig, templates_dir: str):
         """
