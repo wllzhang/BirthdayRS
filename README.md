@@ -1,4 +1,4 @@
-# 生日提醒系统 (Birthday Reminder System)
+ # Birthday Reminder System
 [![Docker Image](https://img.shields.io/badge/docker%20image-ghcr.io/wllzhang/birthdayrs-blue)](https://github.com/wllzhang/BirthdayRS/pkgs/container/birthdayrs)
 [![Python Version](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3100/)
 [![Code Style](https://img.shields.io/badge/code%20style-flake8-black.svg)](https://flake8.pycqa.org/)
@@ -8,44 +8,40 @@
 [![CI](https://github.com/wllzhang/BirthdayRS/actions/workflows/ci.yml/badge.svg)](https://github.com/wllzhang/BirthdayRS/actions/workflows/ci.yml)
 [![Daily Check](https://github.com/wllzhang/BirthdayRS/actions/workflows/daily_check.yml/badge.svg)](https://github.com/wllzhang/BirthdayRS/actions/workflows/daily_check.yml)
 
-一个功能强大的生日提醒系统，支持农历和阳历生日提醒，并提供丰富的中国传统文化信息。
+A powerful birthday reminder system that supports both solar and lunar calendar birthday reminders, with rich Chinese traditional cultural information.
 
-<!-- ![GitHub stars](https://img.shields.io/github/stars/wllzhang/BirthdayRS?style=social)
-![GitHub forks](https://img.shields.io/github/forks/wllzhang/BirthdayRS?style=social)
-![GitHub issues](https://img.shields.io/github/issues/wllzhang/BirthdayRS) -->
+[[中文文档](README.zh-CN.md)]  [[English Doc](README.md)] 
 
+## Features
 
-## 功能特点
+- **Dual Calendar Support**
+  - [x] Solar calendar birthday reminders
+  - [x] Lunar calendar birthday reminders
+  - [x] Smart handling of leap months
 
-- **双历支持**
-  - [x] 支持阳历（公历）生日提醒
-  - [x] 支持农历（阴历）生日提醒
-  - [x] 智能处理闰月情况
+- **Rich Date Information**
+  - [x] Chinese Sexagenary Cycle (GanZhi) for year, month, day, and hour
+  - [x] Chinese Zodiac signs
+  - [x] Lunar festivals
+  - [x] Solar festivals
+  - [x] 24 Solar Terms
+  - [x] Weekday information
+  - [x] Western zodiac signs
 
-- **丰富的日期信息**
-  - [x] 显示干支纪年、纪月、纪日、纪时
-  - [x] 显示生肖属相
-  - [x] 显示农历节日
-  - [x] 显示阳历节日
-  - [x] 显示二十四节气
-  - [x] 显示星期信息
-  - [x] 显示星座信息
-
-- **灵活的提醒设置**
-  - [x] 可自定义提前提醒天数
-  - [x] 支持多人生日提醒
-  - [x] 支持邮件通知
-  - [x] 支持邮件预览功能
-  - [x] 预览邮件
-  - [x] 添加default 
-  - [x] github action支持
-  - [X] Docker部署
+- **Flexible Reminder Settings**
+  - [x] Customizable advance reminder days
+  - [x] Multiple recipient support
+  - [x] Email notifications
+  - [x] Email preview functionality
+  - [x] Default settings
+  - [x] GitHub Actions support
+  - [x] Docker deployment
 - **TODO**
-  - [ ] 支持多通知源
+  - [ ] Multiple notification channels support
 
-## 配置说明
+## Configuration
 
-在项目根目录创建 `config.yml` 文件（可以参考 `config.example.yml`），配置格式如下：
+Create a `config.yml` file in the project root directory (refer to `config.example.yml`), with the following format:
 
 ```yaml
 smtp:
@@ -56,133 +52,132 @@ smtp:
   use_tls: true
 
 recipients:
-  - name: 张三
-    email: zhangsan@example.com
-    solar_birthday: 1990-01-01  # 阳历生日
-    reminder_days: 3  # 提前3天提醒
-  - name: 李四
-    email: lisi@example.com
-    lunar_birthday: 1995-02-15  # 农历生日
-    reminder_days: 7  # 提前7天提醒
+  - name: John Doe
+    email: john@example.com
+    solar_birthday: 1990-01-01  # Solar calendar birthday
+    reminder_days: 3  # Remind 3 days in advance
+  - name: Jane Doe
+    email: jane@example.com
+    lunar_birthday: 1995-02-15  # Lunar calendar birthday
+    reminder_days: 7  # Remind 7 days in advance
 ```
 
-## 使用方法
+## Usage
 
-### 1.本地运行
-#### 运行
+### 1. Local Run
+#### Run
 ```bash
 git clone https://github.com/wllzhang/BirthdayRS.git
 cd BirthdayRS
-# 安装依赖 
+# Install dependencies
 pip install -r requirements.txt
-# 本地运行
+# Run locally
 python -m src.main run
 ```
-#### 预览邮件内容：
+#### Preview Email Content:
 ```bash
-# 预览默认测试用户的邮件
+# Preview default test user's email
 python -m src.main preview
 
-# 预览指定收件人的邮件
-python -m src.main preview --recipient "张三"
+# Preview specific recipient's email
+python -m src.main preview --recipient "John Doe"
 
-# 预览指定日期的邮件
-python -m src.main preview --recipient "张三" --date "2024-01-01"
+# Preview email for a specific date
+python -m src.main preview --recipient "John Doe" --date "2024-01-01"
 ```
-#### 查看帮助信息：
+#### View Help Information:
 ```bash
 python -m src.main --help
 python -m src.main preview --help
 ```
-### 2.Github Action
-   1. Frok仓库, setting配置vars:BIRTHDAY_YAML,值为config.yaml内容
-   2. 点击Action,运行Action:`Daily Birthday Check`
-   
-### 3.Docker运行
 
-#### 可用标签
-- `latest`: 最新稳定版本
-- `vX.Y.Z`: 特定版本（如 v1.0.0）
-- `sha-XXXXXX`: 特定提交的构建
+### 2. GitHub Action
+   1. Fork the repository and configure the `BIRTHDAY_YAML` variable in Settings with your config.yml content
+   2. Go to Actions and run the `Daily Birthday Check` workflow
 
-#### 运行示例
+### 3. Docker Run
+
+#### Available Tags
+- `latest`: Latest stable version
+- `vX.Y.Z`: Specific version (e.g., v1.0.0)
+- `sha-XXXXXX`: Build for specific commit
+
+#### Run Examples
 
 ```bash
-# 运行生日提醒
+# Run birthday reminder
 docker run -v ${PWD}/config.yml:/app/config.yml ghcr.io/wllzhang/birthdayrs:latest run
 
-# 预览邮件
+# Preview email
 docker run -v ${PWD}/config.yml:/app/config.yml \
            -v ${PWD}/previews:/app/previews \
-           ghcr.io/wllzhang/birthdayrs:latest preview -r "测试用户" -d "2024-01-01"
-``` 
+           ghcr.io/wllzhang/birthdayrs:latest preview -r "Test User" -d "2024-01-01"
+```
 
-## 邮件模板
+## Email Templates
 
-系统使用 Jinja2 模板引擎渲染邮件内容，支持自定义邮件模板。默认模板位于 `templates/birthday.html`，包含以下信息：
+The system uses Jinja2 template engine to render email content, supporting custom email templates. The default template is located at `templates/birthday.html` and includes:
 
-- 基本生日信息
-- 农历日期信息
-- 干支纪年月日时
-- 生肖和星座
-- 节日和节气信息
-- 星期信息
+- Basic birthday information
+- Lunar date information
+- Chinese Sexagenary Cycle (GanZhi)
+- Zodiac signs and constellations
+- Festival and solar term information
+- Weekday information
 
-## 测试
+## Testing
 
-运行测试用例：
+Run tests:
 ```bash
 pytest
 ```
 
-## 日志
+## Logging
 
-系统运行日志保存在 `birthday_reminder.log` 文件中，包含以下信息：
-- 配置加载状态
-- 生日检查结果
-- 邮件发送状态
-- 错误信息（如果有）
- 
+System logs are saved in the `birthday_reminder.log` file, including:
+- Configuration loading status
+- Birthday check results
+- Email sending status
+- Error messages (if any)
 
-## CI/CD 流程
+## CI/CD Pipeline
 
-本项目使用 GitHub Actions 实现完整的 CI/CD 流程：
+This project uses GitHub Actions for a complete CI/CD pipeline:
 
-### 持续集成 (CI)
+### Continuous Integration (CI)
 
-每次推送代码或创建 Pull Request 时，会自动运行以下检查：
+The following checks run automatically on each push or Pull Request:
 
-1. **代码测试**
-   - 运行单元测试
-   - 生成测试覆盖率报告
-   - 测试结果作为工件保存
+1. **Code Testing**
+   - Run unit tests
+   - Generate test coverage report
+   - Save test results as artifacts
 
-2. **代码质量检查**
-   - 使用 flake8 进行代码风格检查
-   - 确保代码符合 PEP 8 规范
+2. **Code Quality**
+   - Code style check with flake8
+   - Ensure code follows PEP 8 standards
 
-3. **Docker 镜像构建**
-   - 自动构建 Docker 镜像
-   - 推送到 GitHub Container Registry
+3. **Docker Image Build**
+   - Automatically build Docker image
+   - Push to GitHub Container Registry
 
-### 持续部署 (CD)
+### Continuous Deployment (CD)
 
-1. **每日检查**
-   - 每天自动运行生日检查
-   - 发送提醒邮件
-   - 支持开发环境和生产环境
+1. **Daily Check**
+   - Automatically run birthday checks
+   - Send reminder emails
+   - Support for development and production environments
 
-2. **Docker 部署**
-   - 支持通过 Docker 快速部署
-   - 提供最新版本的镜像
+2. **Docker Deployment**
+   - Quick deployment via Docker
+   - Latest version image available
 
-### 自动化流程
+### Automation
 
-- **README 自动更新**
-  - 自动更新文档中的仓库链接
-  - 保持文档与代码同步
+- **README Auto-update**
+  - Automatically update repository links in documentation
+  - Keep documentation in sync with code
 
-## 许可证
+## License
 
-MIT License 
-
+MIT License
