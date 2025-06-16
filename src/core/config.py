@@ -14,25 +14,26 @@ class SMTPConfig:
     username: str
     password: str
     use_tls: bool = True
+    default_receive_email: Optional[str] = None
+    default_template_file: str = "birthday.html"
+    default_reminder_days: int = 0
 
 
 @dataclass
-class DefaultConfig:
-    """默认配置"""
-    email: str
-    reminder_days: int = 0
-    template_file: str = "birthday.html"
+class ServerChanConfig:
+    default_sckey: Optional[str] = None
+    default_reminder_days: int = 0
 
 
 @dataclass
 class Recipient:
     """收件人信息"""
     name: str
-    email: str
+    email: Optional[str] = None
     solar_birthday: Optional[str] = None  # YYYY-MM-DD 格式
     lunar_birthday: Optional[str] = None  # YYYY-MM-DD 格式（阳历日期）
-    reminder_days: int = 0  # 提前提醒天数
-    template_file: str = "birthday.html"  # 模板文件名
+    reminder_days: Optional[int] = None
+    template_file: Optional[str] = None
 
     def __post_init__(self):
         """验证至少有一个生日日期"""
@@ -44,9 +45,10 @@ class Recipient:
 @dataclass
 class Config:
     """应用配置"""
-    smtp: SMTPConfig
+    smtp_config: Optional[SMTPConfig]
+    serverchan_config: Optional[ServerChanConfig]
     recipients: List[Recipient]
-    default: Optional[DefaultConfig] = None
+    notification_types: List[str]
 
     @classmethod
     def from_yaml(cls, config_path: str) -> 'Config':
@@ -54,29 +56,34 @@ class Config:
         with open(config_path, 'r', encoding='utf-8') as f:
             data = yaml.safe_load(f)
 
-        smtp_config = SMTPConfig(**data['smtp'])
-        default_config = DefaultConfig(
-            **data['default']) if 'default' in data else None
+        notification = data.get('notification', {})
+        notification_types = [t.strip() for t in notification.get('type', 'email').split(',') if t.strip()]
+        smtp_config = SMTPConfig(**notification['smtp']) if 'smtp' in notification else None
+        serverchan_config = ServerChanConfig(**notification['serverchan']) if 'serverchan' in notification else None
 
         recipients = []
-        for r in data['recipients']:
-            # 如果有默认配置，使用默认值
-            if default_config:
-                if 'email' not in r:
-                    r['email'] = default_config.email
+        for r in data.get('recipients', []):
+            # 邮件相关默认
+            if smtp_config:
+                if 'email' not in r and smtp_config.default_receive_email:
+                    r['email'] = smtp_config.default_receive_email
                 if 'reminder_days' not in r:
-                    r['reminder_days'] = default_config.reminder_days
+                    r['reminder_days'] = smtp_config.default_reminder_days
                 if 'template_file' not in r:
-                    r['template_file'] = default_config.template_file
-            else:
-                # 设置默认值
-                r.setdefault('reminder_days', 0)
-                r.setdefault('template_file', 'birthday.html')
-
+                    r['template_file'] = smtp_config.default_template_file
+            # Server酱相关默认
+            if serverchan_config:
+                if 'reminder_days' not in r:
+                    r['reminder_days'] = serverchan_config.default_reminder_days
             recipients.append(Recipient(**r))
 
         return cls(
-            smtp=smtp_config,
+            smtp_config=smtp_config,
+            serverchan_config=serverchan_config,
             recipients=recipients,
-            default=default_config
+            notification_types=notification_types
         )
+
+if __name__ == "__main__":
+    config = Config.from_yaml("config.example.yml")
+    print(config)

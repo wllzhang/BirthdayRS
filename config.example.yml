@@ -1,10 +1,16 @@
-smtp:
-  host: smtp.example.com
-  port: 587
-  username: your_email@example.com
-  password: your_password
-  use_tls: true
-
+notification:
+  smtp:
+    host: smtp.example.com
+    port: 587
+    username: your_email@example.com
+    password: your_password
+    default_receive_email: "xxxxxx@xx"
+    default_template_file: birthday.html
+    default_reminder_days: 3
+  serverchan:
+    default_sckey: your_serverchan_sckey
+    default_reminder_days: 3
+  type: email,serverchan  # 可选: email 或 serverchan
 recipients:
   - name: 张三
     email: zhangsan@example.com
@@ -18,3 +24,6 @@ recipients:
     lunar_birthday: 1991-02-15  # 只设置农历生日
     reminder_days: 7  # 提前7天提醒
     template_file: custom_birthday.html  # 使用自定义模板 
+
+
+  # sckey: '你的Server酱SCKEY'  # 若type为serverchan时必填 
