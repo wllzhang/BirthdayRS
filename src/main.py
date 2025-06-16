@@ -120,5 +120,13 @@ def run():
     asyncio.run(BirthdayReminder().run())
 
 
+@cli.command()
+def preview():
+    """预览生日提醒邮件内容（默认模板）"""
+    from src.notification.sender_email import EmailSender
+    EmailSender.preview_email(web_open=True)
+    print("已生成预览文件并尝试打开浏览器。")
+
+
 if __name__ == "__main__":
     cli()
