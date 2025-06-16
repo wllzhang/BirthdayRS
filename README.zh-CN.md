@@ -90,6 +90,7 @@ docker run -v ${PWD}/config.yml:/app/config.yml -v ${PWD}/previews:/app/previews
 MIT License 
 
 <details>
+
 ## 日志
 
 系统运行日志保存在 `birthday_reminder.log` 文件中，包含以下信息：
@@ -98,11 +99,6 @@ MIT License
 - 邮件发送状态
 - 错误信息（如果有）
  
-
-
-
-
-
 
 ## 邮件模板
 

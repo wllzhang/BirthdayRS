@@ -110,6 +110,7 @@ pytest
 MIT License
 
 <details>
+
 ## Logging
 
 System logs are saved in the `birthday_reminder.log` file, including:
