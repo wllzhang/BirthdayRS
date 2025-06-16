@@ -1,6 +1,7 @@
 """
 主程序入口
 """
+
 import asyncio
 import logging
 import sys
@@ -10,15 +11,15 @@ import click
 from src.core.config import Config
 from src.core.checker import BirthdayChecker, Recipient
 
- 
+
 # 配置日志
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler('birthday_reminder.log')
-    ]
+        logging.FileHandler("birthday_reminder.log"),
+    ],
 )
 logger = logging.getLogger(__name__)
 
@@ -30,13 +31,17 @@ class BirthdayReminder:
         self.config = self._load_config()
         self.notification_senders = []
         for notify_type in self.config.notification_types:
-            if notify_type == 'email' and self.config.smtp_config:
+            if notify_type == "email" and self.config.smtp_config:
                 from src.notification.sender_email import EmailSender
+
                 self.notification_senders.append(
-                    EmailSender(self.config.smtp_config, str(self.root_dir / "templates"))
+                    EmailSender(
+                        self.config.smtp_config, str(self.root_dir / "templates")
+                    )
                 )
-            elif notify_type == 'serverchan' and self.config.serverchan_config:
+            elif notify_type == "serverchan" and self.config.serverchan_config:
                 from src.notification.sender_serverchan import ServerChanSender
+
                 self.notification_senders.append(
                     ServerChanSender(self.config.serverchan_config.default_sckey)
                 )
@@ -50,20 +55,22 @@ class BirthdayReminder:
             logger.error(f"Failed to load config: {e}")
             raise
 
-    async def send_birthday_reminder(self, recipient: Recipient, extra_info: Dict) -> None:
+    async def send_birthday_reminder(
+        self, recipient: Recipient, extra_info: Dict
+    ) -> None:
         """发送生日提醒邮件"""
         try:
             for sender in self.notification_senders:
                 content = sender.render_content(
                     name=recipient.name,
                     template_file=recipient.template_file,
-                    extra_info=extra_info
+                    extra_info=extra_info,
                 )
                 await sender.send(
                     recipient=recipient,
                     content=content,
-                    days_until=extra_info['days_until'],
-                    age=extra_info['age']
+                    days_until=extra_info["days_until"],
+                    age=extra_info["age"],
                 )
             logger.info(f"Successfully sent birthday reminder to {recipient.name}")
         except Exception as e:
