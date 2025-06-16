@@ -85,7 +85,7 @@ python -m src.main preview --help
 ```bash
 # Run birthday reminder
 docker run -v ${PWD}/config.yml:/app/config.yml ghcr.io/wllzhang/birthdayrs:latest run
-docker run -v ${PWD}/config.yml:/app/config.yml ghcr.io/wllzhang/birthdayrs:latest preview
+docker run -v ${PWD}/config.yml:/app/config.yml -v ${PWD}/previews:/app/previews  ghcr.io/wllzhang/birthdayrs:latest preview
 ```
 
 ## Email Templates
