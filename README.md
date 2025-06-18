@@ -67,6 +67,9 @@ python -m src.main preview
 ```bash
 python -m src.main --help
 python -m src.main preview --help
+python -m src.main run
+python -m src.main validate --config config.yml
+python -m src.main info --config config.yml
 ```
 
 ### 2. GitHub Action

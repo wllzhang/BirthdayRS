@@ -59,7 +59,12 @@ cd BirthdayRS
 pip install -r requirements.txt
 # 本地运行
 python -m src.main run
+# 预览
 python -m src.main preview
+# 验证配置
+python -m src.main validate --config config.yml
+# 查看信息
+python -m src.main info --config config.yml
 ```
 #### 查看帮助信息：
 ```bash
