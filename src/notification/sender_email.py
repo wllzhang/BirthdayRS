@@ -16,13 +16,15 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 
-def retry_on_failure(max_retries=3, delay=1):
-    """重试装饰器"""
+def retry_on_failure(max_retries=3, delay=1, backoff=2):
+    """重试装饰器 - 支持指数退避"""
 
     def decorator(func):
         @wraps(func)
         async def wrapper(*args, **kwargs):
             last_exception = None
+            current_delay = delay
+
             for attempt in range(max_retries):
                 try:
                     return await func(*args, **kwargs)
@@ -30,9 +32,16 @@ def retry_on_failure(max_retries=3, delay=1):
                     last_exception = e
                     if attempt < max_retries - 1:
                         logger.warning(
-                            f"Attempt {attempt + 1} failed: {e}. Retrying in {delay} seconds..."
+                            f"Attempt {attempt + 1}/{max_retries} failed: {type(e).__name__}: {e}. "
+                            f"Retrying in {current_delay} seconds..."
                         )
-                        await asyncio.sleep(delay)
+                        await asyncio.sleep(current_delay)
+                        current_delay *= backoff  # 指数退避
+                    else:
+                        logger.error(
+                            f"All {max_retries} attempts failed. Last error: {type(e).__name__}: {e}"
+                        )
+
             raise last_exception
 
         return wrapper
