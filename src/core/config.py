@@ -63,7 +63,7 @@ class Config:
 
         notification = data.get("notification", {})
         notification_types = [
-            t.strip() for t in notification.get("type", "email").split(",") if t.strip()
+            t.strip() for t in notification.get("start_notification", "email").split(",") if t.strip()
         ]
         smtp_config = (
             SMTPConfig(**notification["smtp"]) if "smtp" in notification else None

@@ -10,7 +10,7 @@ notification:
   serverchan:
     default_sckey: your_serverchan_sckey
     default_reminder_days: 3
-  type: email,serverchan  # 可选: email 或 serverchan
+  start_notification: email,serverchan  # 可选: email 或 serverchan
 recipients:
   - name: 张三
     email: zhangsan@example.com
@@ -26,4 +26,3 @@ recipients:
     template_file: custom_birthday.html  # 使用自定义模板 
 
 
-  # sckey: '你的Server酱SCKEY'  # 若type为serverchan时必填 
