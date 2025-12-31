@@ -44,3 +44,4 @@ config.yaml
 *.log
 previews
 .venv
+.claude
