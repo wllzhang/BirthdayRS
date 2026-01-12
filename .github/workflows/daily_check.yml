@@ -7,6 +7,7 @@ on:
 
 env:
   TZ: Asia/Shanghai  # 设置为北京时间
+  REGISTRY: ghcr.io
 
 jobs:
   check-birthdays-pro:
@@ -15,12 +16,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - uses: ./.github/actions
-        with:
-          config_filename: config.yml
-        env:
-          BIRTHDAY_YAML: ${{ vars.BIRTHDAY_YAML }}
+      - name: 📥 创建配置文件
+        run: |
+          mkdir -p config
+          cat > config/config.yml << 'EOF'
+          ${{ vars.BIRTHDAY_YAML }}
+          EOF
+
+      - name: 🐳 拉取并运行 Docker 镜像
+        run: |
+          docker run --rm \
+            -v $PWD/config/config.yml:/app/config.yml \
+            -e TZ=Asia/Shanghai \
+            ${{ env.REGISTRY }}/${{ github.repository }}:latest \
+            run --config /app/config.yml

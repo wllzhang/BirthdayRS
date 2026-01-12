@@ -18,21 +18,5 @@ dependencies = [
     "httpx",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.0.0",
-    "pytest-asyncio>=0.18.0",
-    "pytest-cov>=3.0.0",
-    "pytest-html>=3.0.0",
-    "flake8>=5.0.0",
-]
-
 [project.scripts]
 birthdayrs = "birthdayrs.main:cli"
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "--cov=birthdayrs"
-
-[tool.uv]
-# Add any uv-specific configuration here if needed
