@@ -40,8 +40,13 @@ htmlcov/
 config.yml
 config.yaml
 !config.example.yml
-.env 
+.env
 *.log
 previews
 .venv
 .claude
+
+# Documentation
+docs/_build/
+docs/locale/*.pot
+docs/locale/*/LC_MESSAGES/*.mo
