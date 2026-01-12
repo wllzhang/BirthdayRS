@@ -41,5 +41,5 @@ runs:
       shell: bash
 
     - name: 🎉 执行生日检查
-      run: python -m src.main run
+      run: uv run python -m src.main run
       shell: bash
