@@ -31,9 +31,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # -- Internationalization ----------------------------------------------------
 language = 'zh_CN'
-locale_dirs = ['locale/']
-gettext_compact = False
-gettext_uuid = True
 
 # -- Options for HTML output -------------------------------------------------
 html_theme = 'furo'

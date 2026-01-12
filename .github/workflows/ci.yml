@@ -5,8 +5,14 @@ on:
     branches: [ main, master ]
     tags:
       - 'v*'
+    paths-ignore:
+      - 'docs/**'
+      - '.github/workflows/docs.yml'
   pull_request:
     branches: [ main, master ]
+    paths-ignore:
+      - 'docs/**'
+      - '.github/workflows/docs.yml'
 
 env:
   REGISTRY: ghcr.io
