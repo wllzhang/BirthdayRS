@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#007bff" opacity="0.1"/>
+  <circle cx="100" cy="100" r="95" fill="none" stroke="#007bff" stroke-width="2"/>
+
+  <!-- Cake base -->
+  <ellipse cx="100" cy="150" rx="60" ry="15" fill="#8B4513"/>
+  <rect x="40" y="130" width="120" height="20" fill="#D2691E"/>
+  <ellipse cx="100" cy="130" rx="60" ry="15" fill="#F4A460"/>
+
+  <!-- Cake frosting -->
+  <ellipse cx="100" cy="130" rx="60" ry="15" fill="#FFB6C1"/>
+
+  <!-- Candles -->
+  <rect x="70" y="95" width="8" height="35" fill="#FFD700"/>
+  <rect x="96" y="90" width="8" height="40" fill="#FFD700"/>
+  <rect x="122" y="95" width="8" height="35" fill="#FFD700"/>
+
+  <!-- Flames -->
+  <ellipse cx="74" cy="88" rx="6" ry="10" fill="#FF6B6B">
+    <animate attributeName="ry" values="10;8;10" dur="0.5s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="100" cy="82" rx="7" ry="12" fill="#FFA500">
+    <animate attributeName="ry" values="12;9;12" dur="0.5s" repeatCount="indefinite" begin="0.1s"/>
+  </ellipse>
+  <ellipse cx="126" cy="88" rx="6" ry="10" fill="#FF6B6B">
+    <animate attributeName="ry" values="10;8;10" dur="0.5s" repeatCount="indefinite" begin="0.2s"/>
+  </ellipse>
+
+  <!-- Text -->
+  <text x="100" y="185" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#007bff">BirthdayRS</text>
+</svg>

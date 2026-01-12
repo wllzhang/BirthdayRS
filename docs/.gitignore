@@ -1,0 +1,10 @@
+# Sphinx build directory
+_build/
+
+# Sphinx auto-generated files
+*.pyc
+__pycache__/
+
+# Translation files (auto-generated)
+locale/*.pot
+locale/*/LC_MESSAGES/*.mo

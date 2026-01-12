@@ -45,6 +45,7 @@ config.yaml
 previews
 .venv
 .claude
+birthday_reminder.log
 
 # Documentation
 docs/_build/

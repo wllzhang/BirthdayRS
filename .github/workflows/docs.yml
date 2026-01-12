@@ -1,0 +1,141 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'src/**'
+      - 'docs/**'
+      - 'pyproject.toml'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    branches:
+      - main
+      - master
+    paths:
+      - 'src/**'
+      - 'docs/**'
+      - 'pyproject.toml'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install sphinx furo sphinx-autodoc-typehints myst-parser
+          pip install -r requirements.txt
+
+      - name: Build English documentation
+        run: |
+          cd docs
+          sphinx-build -b html . _build/en
+
+      - name: Build Chinese documentation
+        run: |
+          cd docs
+          mkdir -p _build/zh
+          cp conf_zh.py _build/zh/conf.py
+          sphinx-build -b html -c _build/zh . _build/zh
+
+      - name: Create combined output
+        run: |
+          mkdir -p docs/_build/html
+          cp -r docs/_build/en docs/_build/html/en
+          cp -r docs/_build/zh docs/_build/html/zh
+
+      - name: Create language selector
+        run: |
+          cat > docs/_build/html/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>BirthdayRS Documentation</title>
+            <style>
+              body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background: #f8f9fa;
+              }
+              .container {
+                text-align: center;
+                background: white;
+                padding: 3rem;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+              }
+              h1 { margin-bottom: 2rem; color: #333; }
+              .links { display: flex; gap: 2rem; justify-content: center; }
+              a {
+                padding: 1rem 2rem;
+                background: #007bff;
+                color: white;
+                text-decoration: none;
+                border-radius: 4px;
+                transition: background 0.3s;
+              }
+              a:hover { background: #0056b3; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>BirthdayRS Documentation</h1>
+              <div class="links">
+                <a href="en/index.html">English</a>
+                <a href="zh/index.html">中文</a>
+              </div>
+            </div>
+          </body>
+          </html>
+          EOF
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_build/html
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
