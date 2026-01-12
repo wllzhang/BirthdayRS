@@ -10,10 +10,13 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        version: "latest"
+
     - name: 📦 安装依赖
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      run: uv sync
       shell: bash
 
     - name: 🛠️ 如果配置文件不存在，则创建
