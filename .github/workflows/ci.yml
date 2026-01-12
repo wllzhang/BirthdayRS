@@ -60,7 +60,7 @@ jobs:
 
       - name: Install dependencies (runtime + test tools)
         run: |
-          uv sync --extra dev
+          uv sync
 
       - name: Run tests with coverage and HTML report
         run: |
