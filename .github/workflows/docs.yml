@@ -65,8 +65,11 @@ jobs:
       - name: Create combined output
         run: |
           mkdir -p docs/_build/html
-          cp -r docs/_build/en docs/_build/html/en
-          cp -r docs/_build/zh docs/_build/html/zh
+          # Copy English docs as the root (default)
+          cp -r docs/_build/en/* docs/_build/html/
+          # Copy Chinese docs to zh/ subdirectory
+          mkdir -p docs/_build/html/zh
+          cp -r docs/_build/zh/* docs/_build/html/zh/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

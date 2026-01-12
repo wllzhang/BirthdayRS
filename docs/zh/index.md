@@ -29,7 +29,7 @@ BirthdayRS 是一个现代化的生日提醒系统，提供：
 :maxdepth: 2
 caption: 目录:
 
-../installation
+installation
 quickstart
 configuration
 modules
