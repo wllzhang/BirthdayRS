@@ -70,12 +70,10 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: |
-          uv sync
-          uv pip install flake8
+        run: uv sync
 
       - name: Run linter
-        run: flake8 .
+        run: uv run flake8 .
 
   test:
     name: Run Tests
@@ -97,14 +95,15 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: |
-          uv sync
-          uv pip install pytest pytest-html pytest-cov
+        run: uv sync
+
+      - name: Install test dependencies
+        run: uv pip install pytest pytest-html pytest-cov
 
       - name: Run tests with coverage and HTML report
         run: |
           mkdir -p test-results
-          pytest --cov=src --cov-report=html:test-results/coverage --html=test-results/report.html --self-contained-html
+          uv run pytest --cov=src --cov-report=html:test-results/coverage --html=test-results/report.html --self-contained-html
 
       - name: Upload test results
         if: always()
