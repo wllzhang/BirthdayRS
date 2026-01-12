@@ -71,11 +71,10 @@ jobs:
 
       - name: Install dependencies (runtime + dev tools)
         run: |
-          uv pip install flake8>=5.0.0
-          uv pip install -e .
+          uv add flake8>=5.0.0
 
       - name: Run linter
-        run: flake8 .
+        run: uv run flake8 .
 
   test:
     name: Run Tests

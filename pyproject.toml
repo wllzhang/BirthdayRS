@@ -16,6 +16,7 @@ dependencies = [
     "aiosmtplib>=2.0.0",
     "click",
     "httpx",
+    "flake8>=5.0.4",
 ]
 
 [project.scripts]
