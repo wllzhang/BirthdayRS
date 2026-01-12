@@ -3,7 +3,8 @@ import os
 import sys
 
 # Add the project directory to the path
-sys.path.insert(0, os.path.abspath('..'))
+# When building with -c _build/zh, we need to go up two levels from docs/
+sys.path.insert(0, os.path.abspath('../..'))
 
 # -- Project information -----------------------------------------------------
 project = 'BirthdayRS'
