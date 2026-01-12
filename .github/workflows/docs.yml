@@ -57,6 +57,7 @@ jobs:
       - name: Build Chinese documentation
         run: |
           cd docs
+          mkdir -p _build/zh
           cp conf_zh.py _build/zh/conf.py
           uv run sphinx-build -b html -c _build/zh zh _build/zh
 
