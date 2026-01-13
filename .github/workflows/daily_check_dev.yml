@@ -24,8 +24,9 @@ jobs:
 
       - name: 🐳 拉取并运行 Docker 镜像
         run: |
+          IMAGE_NAME="${{ env.REGISTRY }}/$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]'):latest"
           docker run --rm \
             -v $PWD/config/config.yml:/app/config.yml \
             -e TZ=Asia/Shanghai \
-            ${{ env.REGISTRY }}/${{ github.repository }}:latest \
+            $IMAGE_NAME \
             run --config /app/config.yml

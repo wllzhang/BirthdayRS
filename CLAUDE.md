@@ -12,42 +12,38 @@ BirthdayRS is a birthday reminder system that supports both lunar (Chinese) and 
 ```bash
 # Install dependencies (using uv)
 uv sync
-
-# Install dependencies (using pip)
-pip install -r requirements.txt
-
 # Run the application
-python -m src.main run --config config.yml
+uv run python -m src.main run --config config.yml
 
 # Preview email template
-python -m src.main preview
+uv run python -m src.main preview
 
 # Validate configuration
-python -m src.main validate --config config.yml
+uv run python -m src.main validate --config config.yml
 
 # Show application info
-python -m src.main info --config config.yml
+uv run python -m src.main info --config config.yml
 ```
 
 ### Testing
 ```bash
 # Run all tests
-pytest
+uv run pytest
 
 # Run tests with coverage
-pytest --cov=src
+uv run pytest --cov=src
 
 # Run tests with HTML coverage report
-pytest --cov=src --cov-report=html
+uv run pytest --cov=src --cov-report=html
 
 # Run specific test file
-pytest tests/test_main.py
+uv run pytest tests/test_main.py
 ```
 
 ### Code Quality
 ```bash
 # Run flake8 linter
-flake8 .
+uv run flake8 .
 
 # Flake8 configuration is in .flake8
 # - Max line length: 100
