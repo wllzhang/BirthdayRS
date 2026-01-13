@@ -20,7 +20,7 @@ jobs:
           cat > config/config.yml << 'EOF'
           ${{ vars.BIRTHDAY_YAML }}
           EOF
-          echo "solar_birthday: $(date '+%Y-%m-%d')" >> config/config.yml
+          echo "    solar_birthday: $(date '+%Y-%m-%d')" >> config/config.yml
 
       - name: 🐳 拉取并运行 Docker 镜像
         run: |
