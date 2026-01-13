@@ -41,7 +41,7 @@ contributing
 ## Language Switch
 
 - [English](index.md)
-- [中文](zh/)
+- [中文](/zh/)
 
 ## Indices and tables
 
