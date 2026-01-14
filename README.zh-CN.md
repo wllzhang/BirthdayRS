@@ -32,7 +32,7 @@ python -m src.main run --config config.yml
 
 ## 文档
 
-完整文档请访问 [https://wllzhang.github.io/BirthdayRS/](https://wllzhang.github.io/BirthdayRS/)
+完整文档请访问 [https://wllzhang.github.io/BirthdayRS/zh](https://wllzhang.github.io/BirthdayRS/zh)
 
 ## Docker
 
